@@ -8,9 +8,16 @@ public class LockFreeStack<E> implements Stack<E> {
 	
 	@Override
 	public void push(E entry) {
+		Node<E> newNode = null;
 		while(true) {
 			Node<E> old = head.get();
-			if (head.compareAndSet(old, new Node<E>(entry, old))) {
+			if (newNode == null) {
+				newNode = new Node<E>(entry, old);
+			}
+			else {
+				newNode.next = old;
+			}
+			if (head.compareAndSet(old, newNode)) {
 				return;
 			}
 		}
@@ -43,7 +50,7 @@ public class LockFreeStack<E> implements Stack<E> {
 	
 	private static class Node<E> {
 		final E entry;
-		final Node<E> next;
+	    Node<E> next;
 		
 		Node(E entry, Node<E> next) {
 			this.entry = entry;
