@@ -14,7 +14,7 @@ Test results:
 10 threads, Empty: 101204/msec, LockFree: 6481/msec, Locked: 10942/msec, Synch: 9667/msec, SpinLocked: 1928/msec
 ```
 
-Added usleep(250) in SpinLock through JNI
++ usleep(250) to the SpinLock through JNI
 -------
 
 ```
@@ -29,3 +29,21 @@ Added usleep(250) in SpinLock through JNI
 9 threads, Empty: 93124/msec, LockFree: 7484/msec, Locked: 10431/msec, Synch: 8757/msec, SpinLocked: 16252/msec
 10 threads, Empty: 101087/msec, LockFree: 6924/msec, Locked: 10422/msec, Synch: 9364/msec, SpinLocked: 16200/msec
 ```
+
++ usleep(250) to the LockFreeStack through JNI
+```
+1 threads, Empty: 26262/msec, LockFree: 19541/msec, Locked: 17271/msec, Synch: 21459/msec, SpinLocked: 17369/msec
+2 threads, Empty: 50154/msec, LockFree: 19494/msec, Locked: 8264/msec, Synch: 11176/msec, SpinLocked: 17409/msec
+3 threads, Empty: 74047/msec, LockFree: 19464/msec, Locked: 10376/msec, Synch: 9564/msec, SpinLocked: 17321/msec
+4 threads, Empty: 75911/msec, LockFree: 19446/msec, Locked: 10158/msec, Synch: 9628/msec, SpinLocked: 17128/msec
+5 threads, Empty: 79655/msec, LockFree: 19076/msec, Locked: 10362/msec, Synch: 9533/msec, SpinLocked: 16837/msec
+6 threads, Empty: 85524/msec, LockFree: 19133/msec, Locked: 10391/msec, Synch: 9320/msec, SpinLocked: 16534/msec
+7 threads, Empty: 95920/msec, LockFree: 19082/msec, Locked: 10208/msec, Synch: 9222/msec, SpinLocked: 16569/msec
+8 threads, Empty: 95107/msec, LockFree: 18956/msec, Locked: 10291/msec, Synch: 9498/msec, SpinLocked: 16339/msec
+9 threads, Empty: 100926/msec, LockFree: 18703/msec, Locked: 10499/msec, Synch: 9061/msec, SpinLocked: 16285/msec
+10 threads, Empty: 94880/msec, LockFree: 18536/msec, Locked: 10529/msec, Synch: 9026/msec, SpinLocked: 16200/msec
+```
+
+usleep is key point
+
+

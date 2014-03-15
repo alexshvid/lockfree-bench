@@ -10,11 +10,15 @@ public class LockFreeStack<E extends Node> implements Stack<E> {
 	public void push(E entry) {
 		Holder<E> holder = new Holder<E>(entry);
 		while(true) {
+			
 			Holder<E> top = head.get();
+			
 			entry.setNext(top.node);
 			if (head.compareAndSet(top, holder)) {
 				return;
 			}
+			
+			JvmTools.usleep(250);
 		}
 	}
 
@@ -40,6 +44,7 @@ public class LockFreeStack<E extends Node> implements Stack<E> {
 				return top.node;
 			}
 		
+			JvmTools.usleep(250);
 		}
 		
 	}
