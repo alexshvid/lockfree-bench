@@ -2,22 +2,17 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 
-public class LockFreeStack<E> implements Stack<E> {
+public class LockFreeStack<E extends Node> implements Stack<E> {
 
-	private AtomicReference<Node<E>> head = new AtomicReference<Node<E>>(null);
+	private AtomicReference<Holder<E>> head = new AtomicReference<Holder<E>>(new Holder<E>(null));
 	
 	@Override
 	public void push(E entry) {
-		Node<E> newNode = null;
+		Holder<E> holder = new Holder<E>(entry);
 		while(true) {
-			Node<E> old = head.get();
-			if (newNode == null) {
-				newNode = new Node<E>(entry, old);
-			}
-			else {
-				newNode.next = old;
-			}
-			if (head.compareAndSet(old, newNode)) {
+			Holder<E> top = head.get();
+			entry.setNext(top.node);
+			if (head.compareAndSet(top, holder)) {
 				return;
 			}
 		}
@@ -25,18 +20,24 @@ public class LockFreeStack<E> implements Stack<E> {
 
 	@Override
 	public E pop() {
+		Holder<E> holder = null;
 		while(true) {
 		
-			Node<E> old = head.get();
-			if (old == null) {
+			Holder<E> top = head.get();
+			if (top.node == null) {
 				return null;
 			}
 			
-			E result = old.entry;
-			Node<E> newHead = old.next;
+			E next = (E) top.node.getNext();
+			if (holder == null) {
+				holder = new Holder<E>(next);
+			}
+			else {
+				holder.node = next;
+			}
 			
-			if (head.compareAndSet(old, newHead)) {
-				return result;
+			if (head.compareAndSet(top, holder)) {
+				return top.node;
 			}
 		
 		}
@@ -48,13 +49,10 @@ public class LockFreeStack<E> implements Stack<E> {
 		return head.get() == null;
 	}
 	
-	private static class Node<E> {
-		final E entry;
-	    Node<E> next;
-		
-		Node(E entry, Node<E> next) {
-			this.entry = entry;
-			this.next = next;
+	private static final class Holder<E extends Node> {
+		E node;
+		Holder(E node) {
+			this.node = node;
 		}
 	}
 	

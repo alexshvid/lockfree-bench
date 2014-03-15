@@ -1,5 +1,5 @@
 
-public class SynchronizedStack<E> implements Stack<E> {
+public class SynchronizedStack<E extends Node> implements Stack<E> {
 
 	private Stack<E> stack = new SimpleStack<E>();
 	

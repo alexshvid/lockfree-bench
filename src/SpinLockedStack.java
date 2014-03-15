@@ -1,4 +1,4 @@
-public class SpinLockedStack<E> implements Stack<E> {
+public class SpinLockedStack<E extends Node> implements Stack<E> {
 
 	private SpinLock lock = new SpinLock();
 	private Stack<E> stack = new SimpleStack<E>();

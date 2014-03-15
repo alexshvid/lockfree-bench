@@ -1,15 +1,21 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CyclicBarrier;
 
 
 public class Benchmark {
 
 	public static final int MAX_THREADS = 32;
+	public static final int GLOBAL_QUEUE_SIZE = 20000;
 	
-	public static final class LockedElement {
+	public static final class LockedElement extends Node {
 	    int data;
+	    
+	    public LockedElement(int i) {
+	    	this.data = i;
+	    }
 	};
 	
-	public static final LockedElement DEFAULT_ELEMENT = new LockedElement();
 
 	public static class Worker implements Runnable {
 
@@ -27,8 +33,12 @@ public class Benchmark {
 		@Override
 		public void run() {
 			
+			int threadId = (int) Thread.currentThread().getId();
+			
+			List<LockedElement> localList = new ArrayList<LockedElement>(initElements * MAX_THREADS);
+			
 			for (int i = 0; i != initElements; ++i) {
-				stack.push(DEFAULT_ELEMENT);
+				localList.add(new LockedElement(0));
 			}
 			
 			try {
@@ -39,11 +49,33 @@ public class Benchmark {
 			
 			while(!Thread.interrupted()) {
 			
-				if (ops % 2 == 1){
-					stack.push(DEFAULT_ELEMENT);
+				//if (Math.random() > 0.5){
+				int v = (int)(Math.sqrt(threadId + ops) * 100000.0) % 10;
+				if (v >= 5){
+					if (!localList.isEmpty()) {
+						
+						LockedElement el = localList.remove(localList.size()-1);
+						
+						if (el.data != 0) {
+							System.out.println("Assert Fail el.data==0");
+						}
+						
+						el.data = 1;
+						
+						stack.push(el);
+					}
+					
 				}
 				else {
-					stack.pop();
+					LockedElement el = stack.pop();
+					if (el != null) {
+						if (el.data != 1) {
+							System.out.println("Assert Fail el.data==1");
+						}
+						el.data = 0;
+						localList.add(el);
+					}
+					
 				}
 				
 				ops++;
@@ -66,7 +98,7 @@ public class Benchmark {
 		Thread[] thread = new Thread[numThreads];
 		
 		for (int i = 0; i != numThreads; ++i) {
-			workers[i] = new Worker(barrier, stack, 20000 / numThreads);
+			workers[i] = new Worker(barrier, stack, GLOBAL_QUEUE_SIZE / numThreads);
 			thread[i] = new Thread(workers[i]);
 			thread[i].start();
 		}

@@ -1,7 +1,7 @@
 import java.util.concurrent.locks.ReentrantLock;
 
 
-public class LockedStack<E> implements Stack<E> {
+public class LockedStack<E extends Node> implements Stack<E> {
 
 	private ReentrantLock lock = new ReentrantLock();
 	private Stack<E> stack = new SimpleStack<E>();

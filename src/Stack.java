@@ -1,4 +1,4 @@
-public interface Stack<E> {
+public interface Stack<E extends Node> {
 
 	void push(E entry);
 
