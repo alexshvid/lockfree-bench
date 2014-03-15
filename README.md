@@ -46,6 +46,6 @@ Test results:
 10 threads, Empty: 94880/msec, LockFree: 18536/msec, Locked: 10529/msec, Synch: 9026/msec, SpinLocked: 16200/msec
 ```
 
-usleep is key point
+
 
 
