@@ -31,6 +31,8 @@ Test results:
 ```
 
 + usleep(250) to the LockFreeStack through JNI
+-------
+
 ```
 1 threads, Empty: 26262/msec, LockFree: 19541/msec, Locked: 17271/msec, Synch: 21459/msec, SpinLocked: 17369/msec
 2 threads, Empty: 50154/msec, LockFree: 19494/msec, Locked: 8264/msec, Synch: 11176/msec, SpinLocked: 17409/msec
