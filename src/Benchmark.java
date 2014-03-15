@@ -142,11 +142,12 @@ public class Benchmark {
 		
 	    for(int i = 1; i != MAX_THREADS; ++i)
 	    {
+	        double emptyTime = test(new EmptyStack<LockedElement>(), i);
 	        double lockFreeTime = test(new LockFreeStack<LockedElement>(), i);
 	        double lockedTime = test(new LockedStack<LockedElement>(), i);
 	        double synchTime = test(new SynchronizedStack<LockedElement>(), i);
 	        double spinLockedTime = test(new SpinLockedStack<LockedElement>(), i);
-	        System.out.println(String.format("%d threads, LockFree: %d/msec, Locked: %d/msec, Synch: %d/msec, SpinLocked: %d/msec", i, (int)lockFreeTime, (int)lockedTime, (int)synchTime, (int)spinLockedTime));
+	        System.out.println(String.format("%d threads, Empty: %d/msec, LockFree: %d/msec, Locked: %d/msec, Synch: %d/msec, SpinLocked: %d/msec", i, (int)emptyTime, (int)lockFreeTime, (int)lockedTime, (int)synchTime, (int)spinLockedTime));
 	    }
 		
 	} 
